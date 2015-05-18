@@ -17,8 +17,13 @@ if __name__ == '__main__':
     with open("visitor.csv", newline="") as visitor_file:
         reader = csv.reader(visitor_file)
         sumup_dic = {}
+        visitor_err =[]
         for row in reader:
-            inviter = num_name_dic[int(row[0])]
+            visitor = int(row[0])
+            if not visitor in num_name_dic:
+                visitor_err.append(visitor)
+                continue
+            inviter = num_name_dic[visitor]
             if inviter in sumup_dic:
                 sumup_dic[inviter] += 1
             else:
@@ -29,3 +34,12 @@ if __name__ == '__main__':
         writer = csv.writer(result_file)
         for i in sorted(sumup_dic.keys()):
             writer.writerow([i, sumup_dic[i]])
+
+    # write error
+    with open("error.csv", "w", newline="") as error_file:
+        writer = csv.writer(error_file)
+        if visitor_err:
+            for err in visitor_err:
+                writer.writerow([err])
+        else:
+            writer.writerow(["no error"])
