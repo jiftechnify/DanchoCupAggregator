@@ -13,7 +13,7 @@ if __name__ == '__main__':
         for row in reader:
             num_name_dic[int(row[0])] = row[1]
 
-    # aggrigate
+    # aggregate
     with open("visitor.csv", newline="") as visitor_file:
         reader = csv.reader(visitor_file)
         sumup_dic = {}
