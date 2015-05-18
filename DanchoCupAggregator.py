@@ -16,13 +16,25 @@ if __name__ == '__main__':
     # aggregate
     with open("visitor.csv", newline="") as visitor_file:
         reader = csv.reader(visitor_file)
+        visitor_ls = []
         sumup_dic = {}
-        visitor_err =[]
+        visitor_err = [] # invalid numbers (not in number-inviter list)
+        visitor_dup = [] # duplicate numbers
+
         for row in reader:
             visitor = int(row[0])
+            # error check
             if not visitor in num_name_dic:
                 visitor_err.append(visitor)
                 continue
+            # duplication check
+            if visitor in visitor_ls:
+                if visitor not in visitor_dup:
+                    visitor_dup.append(visitor)
+                continue
+            else:
+                visitor_ls.append(visitor)
+            # sum up
             inviter = num_name_dic[visitor]
             if inviter in sumup_dic:
                 sumup_dic[inviter] += 1
@@ -39,7 +51,12 @@ if __name__ == '__main__':
     with open("error.csv", "w", newline="") as error_file:
         writer = csv.writer(error_file)
         if visitor_err:
-            for err in visitor_err:
+            writer.writerow(["チケットリストにない番号:"])
+            for err in sorted(visitor_err):
                 writer.writerow([err])
+        if visitor_dup:
+            writer.writerow(["重複している番号:"])
+            for dup in sorted(visitor_dup):
+                writer.writerow([dup])
         else:
-            writer.writerow(["no error"])
+            writer.writerow(["エラーはありません"])
